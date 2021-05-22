@@ -10,7 +10,7 @@ ssh into your (correctly configured) AWS server, you need to install anaconda fi
 conda create --name pipeswitch python=3.6
 conda activate pipeswitch
 ```
-Then run the setup script which will install the pipeswitch pytorch\_plugin automatically. You can read the comments in the script to understand what it does.
+Then run the setup script which will install the pipeswitch pytorch\_plugin automatically (you need to run it in this directory). You can read the comments in the script to understand what it does.
 ```
 source setup.sh
 ```
@@ -21,4 +21,20 @@ export PYTHONPATH=[PATH to the repo]:$PYTHONPATH
 ```
 or you may add the above command into your .bashrc file.
 
-## 
+## Figure 5 : Total latency experienced by the client for different mechanisms.
+To reproduce the figure 5 in paper, run `plot_figure5.py` in this directory (some paths are hard-coded in the script).
+```
+python plot_figure5.py
+```
+This script will run four kinds of server (ready model, pipeswitch, MPS, stop-and-start) and compare the latency, i.e. the time between the client send the inference request and the client receive the server's task-finished reply. So it will run several minutes, be patient.
+You may see some EOFError message. Don't worry, it is caused by some dirty thread-killing function in the script.
+If the script completed successfully, you will find figure5.png in this directory, which looks like the figure below:
+![image-figure5](./figure5.png)
+
+## Figure 6 : Throughput and latency under different scheduling cycles for ResNet on p3.2xlarge.
+
+## Figure 7 : Effectiveness of pipelined model transmission.
+
+## Figure 8 : Effectiveness of unified memory management.
+
+## Figure 9 : Effectiveness of active-standby switching.

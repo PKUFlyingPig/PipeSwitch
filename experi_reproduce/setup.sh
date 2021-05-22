@@ -37,3 +37,4 @@ export PYTHONPATH=$REPO_DIR:$PYTHONPATH
 echo "==================================="
 echo "step 5 : install other dependencies"
 echo "==================================="
+conda install matplotlib
