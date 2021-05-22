@@ -11,5 +11,9 @@ Then run the setup script which will install the pipeswitch pytorch\_plugin auto
 source setup.sh
 ```
 If the script completed successfully, you will find a new folder pytorch/ under current directory, this is exactly the pytorch compiled with pipeswitch plugin.
+In the script, it sets the PYTHONPATH environment variable for you, but if you log out then re-ssh into the server, you need to add the path to the repo to PYTHONPATH.
+```
+export PYTHONPATH=[PATH to the repo]:$PYTHONPATH
+```
 
 ## 
