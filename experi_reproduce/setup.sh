@@ -32,3 +32,7 @@ echo "==============================================="
 cd ..
 export PYTHONPATH=$PWD:$PYTHONPATH
 cd -
+
+echo "==================================="
+echo "step 5 : install other dependencies"
+echo "==================================="
