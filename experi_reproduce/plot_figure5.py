@@ -1,5 +1,5 @@
 """
-This script plots the 
+This script plots the figure 5 in paper
 """
 import subprocess
 import time
@@ -28,70 +28,66 @@ def kill_start_server():
     return p
 
 def main():
-    # # ready_model
-    # ready_model_latency_list = dict.fromkeys(model_names)
-    # for m in model_names:
-    #    p = ready_server(m)
-    #    time.sleep(10) # wait for the server to load its model
-    #    mean_latency = request_infer(m, batch_size)
-    #    p.kill()
-    #    ready_model_latency_list[m] = mean_latency
-    #    print("-------------------")
-    #    time.sleep(5)
+    # ready_model
+    ready_model_latency_list = dict.fromkeys(model_names)
+    for m in model_names:
+       p = ready_server(m)
+       time.sleep(10) # wait for the server to load its model
+       mean_latency = request_infer(m, batch_size)
+       p.kill()
+       ready_model_latency_list[m] = mean_latency
+       print("-------------------")
+       time.sleep(5)
 
-    # #pipeswitch
-    # pipeswitch_latency_list = dict.fromkeys(model_names)
-    # for m in model_names:
-    #     p = pipe_server()
-    #     time.sleep(30) # wait for the model to be loaded
-    #     mean_latency = request_switch(m, batch_size)
-    #     p.kill()
-    #     pipeswitch_latency_list[m] = mean_latency
-    #     print("-------------------")
-    #     time.sleep(5)
+    #pipeswitch
+    pipeswitch_latency_list = dict.fromkeys(model_names)
+    for m in model_names:
+        p = pipe_server()
+        time.sleep(30) # wait for the model to be loaded
+        mean_latency = request_switch(m, batch_size)
+        p.kill()
+        pipeswitch_latency_list[m] = mean_latency
+        print("-------------------")
+        time.sleep(5)
 
-    # #kill_restart
-    # kill_restart_latency_list = dict.fromkeys(model_names)
-    # p = kill_start_server()
-    # time.sleep(10) # wait for the server to load its model
-    # for m in model_names:
-    #    mean_latency = request_switch(m, batch_size)
-    #    kill_restart_latency_list[m] = mean_latency
-    #    print("-------------------")
-    #    time.sleep(5)
+    #kill_restart
+    kill_restart_latency_list = dict.fromkeys(model_names)
+    p = kill_start_server()
+    time.sleep(10) # wait for the server to load its model
+    for m in model_names:
+       mean_latency = request_switch(m, batch_size)
+       kill_restart_latency_list[m] = mean_latency
+       print("-------------------")
+       time.sleep(5)
 
-    # # MPS (multi-process service)
-    # # start MPS daemon
-    # os.system("sudo nvidia-cuda-mps-control -d")
-    # time.sleep(5)
+    # MPS (multi-process service)
+    # start MPS daemon
+    os.system("sudo nvidia-cuda-mps-control -d")
+    time.sleep(5)
 
-    # MPS_latency_list = dict.fromkeys(model_names)
-    # p = mps_server("resnet152")
-    # time.sleep(20) # wait for the server to start services and training task
-    # for m in model_names:
-    #     mean_latency = request_new_inference(m, batch_size)
-    #     MPS_latency_list[m] = mean_latency
-    #     print("-------------------")
-    #     time.sleep(5)
-    # p.kill()
-    # # shut down MPS daemon
-    # os.system("echo quit | nvidia-cuda-mps-control")
-    # time.sleep(5)
+    MPS_latency_list = dict.fromkeys(model_names)
+    p = mps_server("resnet152")
+    time.sleep(20) # wait for the server to start services and training task
+    for m in model_names:
+        mean_latency = request_new_inference(m, batch_size)
+        MPS_latency_list[m] = mean_latency
+        print("-------------------")
+        time.sleep(5)
+    p.kill()
+    # shut down MPS daemon
+    os.system("echo quit | nvidia-cuda-mps-control")
+    time.sleep(5)
 
 
-    # print("ready model : ", ready_model_latency_list)
-    # print("pipeswitch : ", pipeswitch_latency_list)
-    # print("MPS : ", MPS_latency_list)
-    # print("kill restart : ", kill_restart_latency_list)
+    print("ready model : ", ready_model_latency_list)
+    print("pipeswitch : ", pipeswitch_latency_list)
+    print("MPS : ", MPS_latency_list)
+    print("kill restart : ", kill_restart_latency_list)
 
     # plot figure
-    ready_model_latency_list = {'resnet152': 55.13779322306315, 'inception_v3': 49.38988420698378, 'bert_base': 73}
-    pipeswitch_latency_list = {'resnet152': 63.13779322306315, 'inception_v3': 55.38988420698378, 'bert_base': 85}
-    mps_latency_list = {'resnet152': 991.9543001386854, 'inception_v3': 754.96673848893907, 'bert_base': 697}
-    kill_restart_latency_list = {'resnet152': 6942.613863945007, 'inception_v3': 8037.053346633911, 'bert_base': 7500}
     grouped_data = {"Ready model":ready_model_latency_list.values(),
                    "PipeSwitch":pipeswitch_latency_list.values(),
-                   "MPS":mps_latency_list.values(),
+                   "MPS":MPS_latency_list.values(),
                    "Stop-and-start":kill_restart_latency_list.values()}
     print(grouped_data)
     plot_cutted_grouped_barchart(model_names, grouped_data, "Latency (ms)", 0.15, "figure5.png")

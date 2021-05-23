@@ -38,6 +38,12 @@ If the script completed successfully, you will find figure5.png in this director
 ## Figure 6 : Throughput and latency under different scheduling cycles for ResNet on p3.2xlarge.
 
 ## Figure 7 : Effectiveness of pipelined model transmission.
+To reproduce the figure 5 in paper, run `plot_figure5.py` in this directory (some paths are hard-coded in the script).
+```
+python plot_figure5.py
+```
+This script only tests the latency for pipeswitch, which uses the pipelining mechanism with optimal model-aware grouping. To get the latency for No optimization/Grouped transmission/Per-layer pipeline, you may modify the pytorch plugin, recompile pytorch then rerun this script. As reference, the latency for pipeswitch is as follows:
+[!image-figure7](./figure7.png)
 
 ## Figure 8 : Effectiveness of unified memory management.
 
