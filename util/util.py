@@ -216,7 +216,7 @@ def plot_cutted_grouped_barchart(groups, grouped_data, ylabel, bar_width, figure
 
     # Add some text for labels, title and custom x-axis tick labels, etc.
     ax1.set_ylim(6000, 10000)
-    ax2.set_ylim(0, 450)
+    ax2.set_ylim(0, 1300)
     ax2.set_ylabel(ylabel)
     ax1.set_xticks(x)
     ax1.set_xticklabels(groups)

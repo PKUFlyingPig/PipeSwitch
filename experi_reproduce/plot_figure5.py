@@ -4,8 +4,9 @@ This script plots the
 import subprocess
 import time
 from util.util import request_new_inference, request_switch, request_infer, request_new_inference, plot_cutted_grouped_barchart
+import os
 
-model_names = ['resnet152', 'inception_v3']
+model_names = ['resnet152', 'inception_v3', 'bert_base']
 batch_size = 8
 
 
@@ -27,7 +28,7 @@ def kill_start_server():
     return p
 
 def main():
-    # ready_model
+    # # ready_model
     # ready_model_latency_list = dict.fromkeys(model_names)
     # for m in model_names:
     #    p = ready_server(m)
@@ -38,7 +39,7 @@ def main():
     #    print("-------------------")
     #    time.sleep(5)
 
-    #pipeswitch
+    # #pipeswitch
     # pipeswitch_latency_list = dict.fromkeys(model_names)
     # for m in model_names:
     #     p = pipe_server()
@@ -49,21 +50,7 @@ def main():
     #     print("-------------------")
     #     time.sleep(5)
 
-    # MPS (multi-process service)
-    MPS_latency_list = dict.fromkeys(model_names)
-    for m in model_names:
-        p = mps_server(m)
-        time.sleep(30) # wait for the server to start services and training task
-        mean_latency = request_new_inference(m, batch_size)
-        p.kill()
-        MPS_latency_list[m] = mean_latency
-        print("-------------------")
-        time.sleep(5)
-
-
-    
-
-    #kill_restart
+    # #kill_restart
     # kill_restart_latency_list = dict.fromkeys(model_names)
     # p = kill_start_server()
     # time.sleep(10) # wait for the server to load its model
@@ -73,22 +60,42 @@ def main():
     #    print("-------------------")
     #    time.sleep(5)
 
+    # # MPS (multi-process service)
+    # # start MPS daemon
+    # os.system("sudo nvidia-cuda-mps-control -d")
+    # time.sleep(5)
+
+    # MPS_latency_list = dict.fromkeys(model_names)
+    # p = mps_server("resnet152")
+    # time.sleep(20) # wait for the server to start services and training task
+    # for m in model_names:
+    #     mean_latency = request_new_inference(m, batch_size)
+    #     MPS_latency_list[m] = mean_latency
+    #     print("-------------------")
+    #     time.sleep(5)
+    # p.kill()
+    # # shut down MPS daemon
+    # os.system("echo quit | nvidia-cuda-mps-control")
+    # time.sleep(5)
+
+
     # print("ready model : ", ready_model_latency_list)
-    # #print("pipeswitch : ", pipeswitch_latency_list)
-    print("MPS : ", MPS_latency_list)
+    # print("pipeswitch : ", pipeswitch_latency_list)
+    # print("MPS : ", MPS_latency_list)
     # print("kill restart : ", kill_restart_latency_list)
 
     # plot figure
-    #ready_model_latency_list = dict.fromkeys(model_names, 40)
-    #pipeswitch_latency_list = dict.fromkeys(model_names, 50)
-    #mps_latency_list = dict.fromkeys(model_names, 300)
-    #kill_restart_latency_list = dict.fromkeys(model_names, 7000)
-    #grouped_data = {"Ready model":ready_model_latency_list.values(),
-    #                "PipeSwitch":pipeswitch_latency_list.values(),
-    #                "MPS":mps_latency_list.values(),
-    #                "Stop-and-start":kill_restart_latency_list.values()}
-    #plot_cutted_grouped_barchart(model_names, grouped_data, "Latency (ms)", 0.15, "figure5.png")
-    #print("figure 5 is done.")
+    ready_model_latency_list = {'resnet152': 55.13779322306315, 'inception_v3': 49.38988420698378, 'bert_base': 73}
+    pipeswitch_latency_list = {'resnet152': 63.13779322306315, 'inception_v3': 55.38988420698378, 'bert_base': 85}
+    mps_latency_list = {'resnet152': 991.9543001386854, 'inception_v3': 754.96673848893907, 'bert_base': 697}
+    kill_restart_latency_list = {'resnet152': 6942.613863945007, 'inception_v3': 8037.053346633911, 'bert_base': 7500}
+    grouped_data = {"Ready model":ready_model_latency_list.values(),
+                   "PipeSwitch":pipeswitch_latency_list.values(),
+                   "MPS":mps_latency_list.values(),
+                   "Stop-and-start":kill_restart_latency_list.values()}
+    print(grouped_data)
+    plot_cutted_grouped_barchart(model_names, grouped_data, "Latency (ms)", 0.15, "figure5.png")
+    print("figure 5 is done.")
 
 if __name__ == '__main__':
     main()
