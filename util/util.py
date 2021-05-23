@@ -65,6 +65,41 @@ def request_infer(model_name, batch_size):
     stable_latency_list = latency_list[10:]
     return statistics.mean(stable_latency_list)
 
+def request_new_inference(model_name, batch_size):
+    """
+    In each iteration, send an inferece request, wait for the reply and record the latency without switching.
+    assuming the model has not already been loaded into GPU.
+    return the average latency (the time between the client send the inference request and the client receive the reply)
+    """
+    task_name_inf = '%s_inference' % model_name
+
+    # Load image
+    data = get_data(model_name, batch_size)
+
+    latency_list = []
+    for _ in range(20):
+        # Connect
+        client_inf = TcpClient('localhost', 12345)
+        timestamp('client', 'after_inference_connect')
+        time_1 = time.time()
+
+        # Send inference request
+        send_request(client_inf, task_name_inf, data)
+
+        # Recv inference reply
+        recv_response(client_inf)
+        time_2 = time.time()
+        latency = (time_2 - time_1) * 1000
+        latency_list.append(latency)
+
+        time.sleep(1)
+        close_connection(client_inf)
+        time.sleep(1)
+        timestamp('**********', '**********')
+
+    stable_latency_list = latency_list[10:]
+    return statistics.mean(stable_latency_list)
+
 def send_request(client, task_name, data):
     timestamp('client', 'before_request_%s' % task_name)
 

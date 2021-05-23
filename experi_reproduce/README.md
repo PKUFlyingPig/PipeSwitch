@@ -32,9 +32,9 @@ If the script completed successfully, you will find figure5.png in this director
 ![image-figure5](./figure5.png)
 
 ### Tips:
-- before you run the script, you may use `nvidia-smi` to check that the GPU is idle, and there is no other process on the GPU, or you may get `File exist` error which indicates the GPU memory is not enough.
-- before you run the script, you may also use `netstat -tlnp|grep 1234` to check there is no other process listening on the same address, or you may get `OSERROR: Address already in use`.
-
+- Before you run the script, you may use `nvidia-smi` to check that the GPU is idle, and there is no other process on the GPU, or you may get `File exist` error which indicates the GPU memory is not enough.
+- Before you run the script, you may also use `netstat -tlnp|grep 1234` to check there is no other process listening on the same address, or you may get `OSERROR: Address already in use`.For convenience, you can use `netstat -tnlp | grep 12345 | sed "s/.*LISTEN\s*\([0-9]*\).*thon/\1/g" | xargs kill -9` to kill the thread which listen on port 1234.
+- You need to have the root priviledge to run the MPS service, see [MPS user guide](https://docs.nvidia.com/deploy/pdf/CUDA_Multi_Process_Service_Overview.pdf) for more details.
 ## Figure 6 : Throughput and latency under different scheduling cycles for ResNet on p3.2xlarge.
 
 ## Figure 7 : Effectiveness of pipelined model transmission.

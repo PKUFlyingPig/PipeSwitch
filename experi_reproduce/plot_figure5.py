@@ -3,7 +3,7 @@ This script plots the
 """
 import subprocess
 import time
-from util.util import request_switch, request_infer, plot_cutted_grouped_barchart
+from util.util import request_new_inference, request_switch, request_infer, request_new_inference, plot_cutted_grouped_barchart
 
 model_names = ['resnet152', 'inception_v3']
 batch_size = 8
@@ -16,6 +16,10 @@ def ready_server(model):
 
 def pipe_server():
     p = subprocess.Popen(['python','../pipeswitch/main.py','model_list.txt'])
+    return p
+
+def mps_server(model):
+    p = subprocess.Popen(['python','./mps_server.py', model])
     return p
 
 def kill_start_server():
@@ -45,12 +49,13 @@ def main():
     #     print("-------------------")
     #     time.sleep(5)
 
-    # MPS
+    # MPS (multi-process service)
     MPS_latency_list = dict.fromkeys(model_names)
-    p = kill_start_server()
-    time.sleep(10) # wait for the server to load its model
     for m in model_names:
-        mean_latency = request_switch(m, batch_size)
+        p = mps_server(m)
+        time.sleep(30) # wait for the server to start services and training task
+        mean_latency = request_new_inference(m, batch_size)
+        p.kill()
         MPS_latency_list[m] = mean_latency
         print("-------------------")
         time.sleep(5)
@@ -59,19 +64,19 @@ def main():
     
 
     #kill_restart
-    #kill_restart_latency_list = dict.fromkeys(model_names)
-    #p = kill_start_server()
-    #time.sleep(10) # wait for the server to load its model
-    #for m in model_names:
+    # kill_restart_latency_list = dict.fromkeys(model_names)
+    # p = kill_start_server()
+    # time.sleep(10) # wait for the server to load its model
+    # for m in model_names:
     #    mean_latency = request_switch(m, batch_size)
     #    kill_restart_latency_list[m] = mean_latency
     #    print("-------------------")
     #    time.sleep(5)
 
-    #print("ready model : ", ready_model_latency_list)
-    #print("pipeswitch : ", pipeswitch_latency_list)
+    # print("ready model : ", ready_model_latency_list)
+    # #print("pipeswitch : ", pipeswitch_latency_list)
     print("MPS : ", MPS_latency_list)
-    #print("kill restart : ", kill_restart_latency_list)
+    # print("kill restart : ", kill_restart_latency_list)
 
     # plot figure
     #ready_model_latency_list = dict.fromkeys(model_names, 40)
