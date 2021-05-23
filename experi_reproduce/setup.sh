@@ -38,3 +38,6 @@ echo "==================================="
 echo "step 5 : install other dependencies"
 echo "==================================="
 conda install matplotlib
+pip install torchvision==0.4.2 --no-deps
+pip install scipy==1.3.2 --no-deps
+pip install transformers

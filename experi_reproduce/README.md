@@ -31,6 +31,10 @@ You may see some EOFError message. Don't worry, it is caused by some dirty threa
 If the script completed successfully, you will find figure5.png in this directory, which looks like the figure below:
 ![image-figure5](./figure5.png)
 
+### Tips:
+- before you run the script, you may use `nvidia-smi` to check that the GPU is idle, and there is no other process on the GPU, or you may get `File exist` error which indicates the GPU memory is not enough.
+- before you run the script, you may also use `netstat -tlnp|grep 1234` to check there is no other process listening on the same address, or you may get `OSERROR: Address already in use`.
+
 ## Figure 6 : Throughput and latency under different scheduling cycles for ResNet on p3.2xlarge.
 
 ## Figure 7 : Effectiveness of pipelined model transmission.

@@ -39,7 +39,7 @@ def func_schedule(qin):
     while True:
         agent, model_name, data_b = qin.get()
         if active_worker is not None:
-            active_worker.kill()
+            active_worker.terminate()
             active_worker.join()
         active_worker = mp.Process(target=worker_compute, args=(agent, model_name, data_b))
         active_worker.start()
