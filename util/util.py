@@ -197,7 +197,7 @@ def plot_grouped_barchart(groups, grouped_data, ylabel, bar_width, figurename):
     fig.tight_layout()
     fig.savefig(figurename)
 
-def plot_cutted_grouped_barchart(groups, grouped_data, ylabel, bar_width, figurename):
+def plot_cutted_grouped_barchart(groups, grouped_data, ylabel, bar_width, figurename, low_cut=1300, high_cut=6000):
     ngroup = len(groups)
     x = np.arange(ngroup)  # the label locations
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
@@ -215,8 +215,8 @@ def plot_cutted_grouped_barchart(groups, grouped_data, ylabel, bar_width, figure
     ax2.xaxis.tick_bottom()
 
     # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax1.set_ylim(6000, 10000)
-    ax2.set_ylim(0, 1300)
+    ax1.set_ylim(high_cut, 10000)
+    ax2.set_ylim(0, low_cut)
     ax2.set_ylabel(ylabel)
     ax1.set_xticks(x)
     ax1.set_xticklabels(groups)
