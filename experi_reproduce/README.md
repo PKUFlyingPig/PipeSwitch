@@ -40,7 +40,8 @@ To reproduce the figure 6 in paper, run `plot_figure6.py` in this directory (som
 ```
 python plot_figure6.py
 ```
-
+This script compares the throught under different scheduling cycles. If the script completed successfully, you will find figure9.png in this directory, which looks like the figure below:
+![image-figure6a](./figure6a.png)
 ## Figure 7 : Effectiveness of pipelined model transmission.
 To reproduce the figure 7 in paper, run `plot_figure7.py` in this directory (some paths are hard-coded in the script).
 ```
