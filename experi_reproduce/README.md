@@ -28,7 +28,7 @@ python plot_figure5.py
 ```
 This script will run four kinds of server (ready model, pipeswitch, MPS, stop-and-start) and compare the latency, i.e. the time between the client send the inference request and the client receive the server's task-finished reply. So it will run several minutes, be patient.
 You may see some EOFError message. Don't worry, it is caused by some dirty thread-killing function in the script.
-If the script completed successfully, you will find figure5.png in this directory, which looks like the figure on the right:
+If the script completed successfully, you will find figure5.png in this directory, which looks like the figure below:
 ![image-figure5](./figure5.png)
 
 ### Tips:
@@ -41,7 +41,7 @@ To reproduce the figure 6 in paper, run `plot_figure6.py` in this directory (som
 python plot_figure6.py
 ```
 This script compares the throught under different scheduling cycles. 
-If the script completed successfully, you will find figure6a.png in this directory, which looks like the figure below:
+If the script completed successfully, you will find figure6a.png in this directory, which looks like the figure on the right:
 ![image-figure6a](./figure6a.png)
 
 ## Figure 7 : Effectiveness of pipelined model transmission.
